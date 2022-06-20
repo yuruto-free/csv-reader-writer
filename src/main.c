@@ -6,19 +6,19 @@
 static void print_console(int *data);
 static void output_return_type(enum CSVAPI_RETURN_TYPE ret) {
     if (CSVAPI_RETURN_OK == ret) {
-        printf("CSVAPI_RETURN_OK\n");
+        fprintf(stderr, "CSVAPI_RETURN_OK\n");
     } else if (CSVAPI_INTERNAL_ERR == ret) {
-        printf("CSVAPI_INTERNAL_ERR\n");
+        fprintf(stderr, "CSVAPI_INTERNAL_ERR\n");
     } else if (CSVAPI_STATUS_ERR == ret) {
-        printf("CSVAPI_STATUS_ERR\n");
+        fprintf(stderr, "CSVAPI_STATUS_ERR\n");
     } else if (CSVAPI_ARGUMENT_ERR == ret) {
-        printf("CSVAPI_ARGUMENT_ERR\n");
+        fprintf(stderr, "CSVAPI_ARGUMENT_ERR\n");
     } else if (CSVAPI_IO_ERR == ret) {
-        printf("CSVAPI_IO_ERR\n");
+        fprintf(stderr, "CSVAPI_IO_ERR\n");
     } else if (CSVAPI_MALLOC_ERR == ret) {
-        printf("CSVAPI_MALLOC_ERR\n");
+        fprintf(stderr, "CSVAPI_MALLOC_ERR\n");
     } else {
-        printf("None\n");
+        fprintf(stderr, "None\n");
     }
 }
 
