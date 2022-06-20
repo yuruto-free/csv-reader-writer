@@ -5,26 +5,20 @@
 
 static void print_console(int *data);
 static void output_return_type(enum CSVAPI_RETURN_TYPE ret) {
-    if (RETURN_OK == ret) {
-        printf("RETURN_OK\n");
-    }
-    else if (INTERNAL_ERR == ret) {
-        printf("INTERNAL_ERR\n");
-    }
-    else if (STATUS_ERR == ret) {
-        printf("STATUS_ERR\n");
-    }
-    else if (ARGUMENT_ERR == ret) {
-        printf("ARGUMENT_ERR\n");
-    }
-    else if (IO_ERR == ret) {
-        printf("IO_ERR\n");
-    }
-    else if (MALLOC_ERR == ret) {
-        printf("MALLOC_ERR\n");
-    }
-    else {
-        printf("none\n");
+    if (CSVAPI_RETURN_OK == ret) {
+        printf("CSVAPI_RETURN_OK\n");
+    } else if (CSVAPI_INTERNAL_ERR == ret) {
+        printf("CSVAPI_INTERNAL_ERR\n");
+    } else if (CSVAPI_STATUS_ERR == ret) {
+        printf("CSVAPI_STATUS_ERR\n");
+    } else if (CSVAPI_ARGUMENT_ERR == ret) {
+        printf("CSVAPI_ARGUMENT_ERR\n");
+    } else if (CSVAPI_IO_ERR == ret) {
+        printf("CSVAPI_IO_ERR\n");
+    } else if (CSVAPI_MALLOC_ERR == ret) {
+        printf("CSVAPI_MALLOC_ERR\n");
+    } else {
+        printf("None\n");
     }
 }
 
@@ -35,14 +29,14 @@ int main(int argc, char **argv) {
     if (argc == 2) {
         // 初期化
         ret = CSVAPI_initialize(argv[1]);
-        if (RETURN_OK != ret) {
+        if (CSVAPI_RETURN_OK != ret) {
             output_return_type(ret);
             fprintf(stderr, "Error: CSVAPI_initalize\n");
             goto EXIT_MAIN;
         }
         // CSVファイルの読み込み
         ret = CSVAPI_read_data(&data);
-        if (RETURN_OK != ret) {
+        if (CSVAPI_RETURN_OK != ret) {
             output_return_type(ret);
             fprintf(stderr, "Error: CSVAPI_read_data\n");
             goto EXIT_MAIN;
@@ -51,20 +45,19 @@ int main(int argc, char **argv) {
         print_console(data);
         // ファイルへの書き込み
         ret = CSVAPI_write_data(OUTPUT_CSV_FILENAME, data);
-        if (RETURN_OK != ret) {
+        if (CSVAPI_RETURN_OK != ret) {
             output_return_type(ret);
             fprintf(stderr, "Error: CSVAPI_write_data\n");
             goto EXIT_MAIN;
         }
         // 終了処理
         ret = CSVAPI_finalize();
-        if (RETURN_OK != ret) {
+        if (CSVAPI_RETURN_OK != ret) {
             output_return_type(ret);
             fprintf(stderr, "Error: CSVAPI_finalize\n");
             goto EXIT_MAIN;
         }
-    }
-    else {
+    } else {
         fprintf(stderr, "Usage: %s csv-filename\n", argv[0]);
     }
 
