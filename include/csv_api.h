@@ -1,15 +1,12 @@
 #ifndef CSV_API_H_
 #define CSV_API_H_
 #define CSVAPI_INDEX(row, col, dim) ((row) * (dim) + (col))
-
-enum CSVAPI_RETURN_TYPE {
-    CSVAPI_RETURN_OK    = 0,
-    CSVAPI_INTERNAL_ERR = 1,
-    CSVAPI_STATUS_ERR   = 2,
-    CSVAPI_ARGUMENT_ERR = 3,
-    CSVAPI_IO_ERR       = 4,
-    CSVAPI_MALLOC_ERR   = 5,
-};
+#define CSVAPI_RETURN_OK (0)
+#define CSVAPI_INTERNAL_ERR (1)
+#define CSVAPI_STATUS_ERR (2)
+#define CSVAPI_ARGUMENT_ERR (3)
+#define CSVAPI_IO_ERR (4)
+#define CSVAPI_MALLOC_ERR (5)
 
 /**
  * @brief 初期化処理
@@ -20,7 +17,7 @@ enum CSVAPI_RETURN_TYPE {
            CSVAPI_MALLOC_ERR:   mallocエラー
 */
 
-enum CSVAPI_RETURN_TYPE CSVAPI_initialize(const char *csv_filename);
+int CSVAPI_initialize(const char *csv_filename);
 
 /**
  * @brief データ読み込み処理
@@ -32,7 +29,7 @@ enum CSVAPI_RETURN_TYPE CSVAPI_initialize(const char *csv_filename);
            CSVAPI_MALLOC_ERR:   mallocエラー
            CSVAPI_INTERNAL_ERR: 内部エラー
 */
-enum CSVAPI_RETURN_TYPE CSVAPI_read_data(int **data);
+int CSVAPI_read_data(int **data);
 
 /**
  * @brief データの書き込み
@@ -44,7 +41,7 @@ enum CSVAPI_RETURN_TYPE CSVAPI_read_data(int **data);
            CSVAPI_IO_ERR:       入出力エラー
            CSVAPI_INTERNAL_ERR: 内部エラー
 */
-enum CSVAPI_RETURN_TYPE CSVAPI_write_data(const char *filename, int *data);
+int CSVAPI_write_data(const char *filename, int *data);
 
 /**
  * @brief rowの取得
@@ -53,7 +50,7 @@ enum CSVAPI_RETURN_TYPE CSVAPI_write_data(const char *filename, int *data);
            CSVAPI_STATUS_ERR:   内部状態エラー
            CSVAPI_IO_ERR:       入出力エラー
 */
-enum CSVAPI_RETURN_TYPE CSVAPI_get_row(int *row);
+int CSVAPI_get_row(int *row);
 
 /**
  * @brief colの取得
@@ -62,13 +59,13 @@ enum CSVAPI_RETURN_TYPE CSVAPI_get_row(int *row);
            CSVAPI_STATUS_ERR:   内部状態エラー
            CSVAPI_IO_ERR:       入出力エラー
 */
-enum CSVAPI_RETURN_TYPE CSVAPI_get_col(int *col);
+int CSVAPI_get_col(int *col);
 
 /**
  * @brief 終了処理
  * @return CSVAPI_RETURN_OK:    成功
            CSVAPI_STATUS_ERR:   内部状態エラー
 */
-enum CSVAPI_RETURN_TYPE CSVAPI_finalize();
+int CSVAPI_finalize();
 
 #endif
