@@ -42,18 +42,18 @@ static int read_data(FILE *fd, int *data);
 */
 static int write_data(FILE *fd, int *data);
 
-enum CSVAPI_RETURN_TYPE CSVAPI_initialize(const char *csv_filename) {
-    enum CSVAPI_RETURN_TYPE ret;
+int CSVAPI_initialize(const char *csv_filename) {
+    int ret;
     int length;
 
     // 内部状態チェック
     if ((int)IS_INIT == is_init) {
-        ret = CSVAPI_STATUS_ERR;
+        ret = (int)CSVAPI_STATUS_ERR;
         goto EXIT_INITIALIZE;
     }
     // 引数チェック
     if (NULL == csv_filename) {
-        ret = CSVAPI_ARGUMENT_ERR;
+        ret = (int)CSVAPI_ARGUMENT_ERR;
         goto EXIT_INITIALIZE;
     }
     // 内部変数を初期化
@@ -69,44 +69,44 @@ enum CSVAPI_RETURN_TYPE CSVAPI_initialize(const char *csv_filename) {
     memcpy(args.filename, csv_filename, length);
     // 内部状態を更新
     is_init = (int)IS_INIT;
-    ret     = CSVAPI_RETURN_OK;
+    ret     = (int)CSVAPI_RETURN_OK;
 
 EXIT_INITIALIZE:
 
     return ret;
 }
 
-enum CSVAPI_RETURN_TYPE CSVAPI_read_data(int **data) {
-    enum CSVAPI_RETURN_TYPE ret;
+int CSVAPI_read_data(int **data) {
+    int ret;
     int func_val;
     FILE *fd = NULL;
 
     // 内部状態チェック
     if ((int)IS_NOT_INIT == is_init) {
-        ret = CSVAPI_STATUS_ERR;
+        ret = (int)CSVAPI_STATUS_ERR;
         goto EXIT_READ_DATA;
     }
     // 引数チェック
     if ((NULL == data) && (NULL != (*data))) {
-        ret = CSVAPI_ARGUMENT_ERR;
+        ret = (int)CSVAPI_ARGUMENT_ERR;
         goto EXIT_READ_DATA;
     }
     // ファイル読み込み準備
     fd = fopen(args.filename, "r");
     if (NULL == fd) {
-        ret = CSVAPI_IO_ERR;
+        ret = (int)CSVAPI_IO_ERR;
         goto EXIT_READ_DATA;
     }
     // データカウント
     func_val = row_col_counter(fd);
     if ((int)RETVAL_OK != func_val) {
-        ret = CSVAPI_INTERNAL_ERR;
+        ret = (int)CSVAPI_INTERNAL_ERR;
         goto EXIT_READ_DATA;
     }
     // malloc
     (*data) = (int *)malloc(sizeof(int) * args.row * args.col);
     if (NULL == (*data)) {
-        ret = CSVAPI_MALLOC_ERR;
+        ret = (int)CSVAPI_MALLOC_ERR;
         goto EXIT_READ_DATA;
     }
     memset(*data, 0, sizeof(int) * args.row * args.col);
@@ -114,10 +114,10 @@ enum CSVAPI_RETURN_TYPE CSVAPI_read_data(int **data) {
     fseek(fd, 0, SEEK_SET);
     func_val = read_data(fd, *data);
     if ((int)RETVAL_OK != func_val) {
-        ret = CSVAPI_INTERNAL_ERR;
+        ret = (int)CSVAPI_INTERNAL_ERR;
         goto EXIT_READ_DATA;
     }
-    ret = CSVAPI_RETURN_OK;
+    ret = (int)CSVAPI_RETURN_OK;
 
 EXIT_READ_DATA:
     if (NULL != fd) {
@@ -127,75 +127,74 @@ EXIT_READ_DATA:
     return ret;
 }
 
-enum CSVAPI_RETURN_TYPE CSVAPI_write_data(const char *filename, int *data) {
-    enum CSVAPI_RETURN_TYPE ret;
+int CSVAPI_write_data(const char *filename, int *data) {
+    int ret;
     int func_val;
-    FILE *fd = NULL;
+    FILE *fd;
 
     // 内部状態チェック
     if ((int)IS_NOT_INIT == is_init) {
-        ret = CSVAPI_STATUS_ERR;
+        ret = (int)CSVAPI_STATUS_ERR;
         goto EXIT_WRITE_DATA;
     }
     // 引数チェック
     if (NULL == data) {
-        ret = CSVAPI_ARGUMENT_ERR;
+        ret = (int)CSVAPI_ARGUMENT_ERR;
         goto EXIT_WRITE_DATA;
     }
     // ファイル書き込み準備
     fd = fopen(filename, "w");
     if (NULL == fd) {
-        ret = CSVAPI_IO_ERR;
+        ret = (int)CSVAPI_IO_ERR;
         goto EXIT_WRITE_DATA;
     }
     // 書き込み処理
     func_val = write_data(fd, data);
+    fclose(fd);
+
     if ((int)RETVAL_OK != func_val) {
-        ret = CSVAPI_INTERNAL_ERR;
+        ret = (int)CSVAPI_INTERNAL_ERR;
         goto EXIT_WRITE_DATA;
     }
-    ret = CSVAPI_RETURN_OK;
+    ret = (int)CSVAPI_RETURN_OK;
 
 EXIT_WRITE_DATA:
-    if (NULL != fd) {
-        fclose(fd);
-    }
 
     return ret;
 }
 
-enum CSVAPI_RETURN_TYPE CSVAPI_get_row(int *row) {
-    enum CSVAPI_RETURN_TYPE ret;
+int CSVAPI_get_row(int *row) {
+    int ret;
 
     if (NULL == row) {
-        ret = CSVAPI_ARGUMENT_ERR;
+        ret = (int)CSVAPI_ARGUMENT_ERR;
         goto EXIT_GET_ROW;
     }
     *row = args.row;
-    ret  = CSVAPI_RETURN_OK;
+    ret  = (int)CSVAPI_RETURN_OK;
 
 EXIT_GET_ROW:
 
     return ret;
 }
 
-enum CSVAPI_RETURN_TYPE CSVAPI_get_col(int *col) {
-    enum CSVAPI_RETURN_TYPE ret;
+int CSVAPI_get_col(int *col) {
+    int ret;
 
     if (NULL == col) {
-        ret = CSVAPI_ARGUMENT_ERR;
+        ret = (int)CSVAPI_ARGUMENT_ERR;
         goto EXIT_GET_COL;
     }
     *col = args.col;
-    ret  = CSVAPI_RETURN_OK;
+    ret  = (int)CSVAPI_RETURN_OK;
 
 EXIT_GET_COL:
 
     return ret;
 }
 
-enum CSVAPI_RETURN_TYPE CSVAPI_finalize() {
-    enum CSVAPI_RETURN_TYPE ret;
+int CSVAPI_finalize() {
+    int ret;
 
     // 内部状態チェック
     if ((int)IS_INIT == is_init) {
@@ -207,9 +206,9 @@ enum CSVAPI_RETURN_TYPE CSVAPI_finalize() {
         memset(&args, 0, sizeof(struct param_t));
         // 内部状態を更新
         is_init = (int)IS_NOT_INIT;
-        ret     = CSVAPI_RETURN_OK;
+        ret     = (int)CSVAPI_RETURN_OK;
     } else {
-        ret = CSVAPI_STATUS_ERR;
+        ret = (int)CSVAPI_STATUS_ERR;
     }
 
     return ret;

@@ -11,9 +11,12 @@ SOURCES  = $(wildcard $(SRCDIR)/*.c)
 OBJECTS  = $(addprefix $(OBJDIR)/, $(notdir $(SOURCES:.c=.o)))
 DEPENDS  = $(OBJECTS:.o=.d)
 
-.PHONY: all clean
+.PHONY: all clean run
 
 all: $(TARGET)
+
+run: $(TARGET)
+	./$(TARGET) sample.csv
 
 -include $(DEPENDS)
 
@@ -30,4 +33,5 @@ $(OBJDIR)/%.o: $(SRCDIR)/%.c
 clean:
 	make clean -C $(LIBDIR)
 	rm -rf $(OBJECTS) $(DEPENDS) $(TARGET) $(OBJDIR)
+	rm -rf output.csv
 	rm -f *~
