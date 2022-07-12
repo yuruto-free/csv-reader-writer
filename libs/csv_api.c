@@ -87,7 +87,7 @@ int CSVAPI_read_data(int **data) {
         goto EXIT_READ_DATA;
     }
     // 引数チェック
-    if ((NULL == data) && (NULL != (*data))) {
+    if ((NULL == data) || (NULL != (*data))) {
         ret = (int)CSVAPI_ARGUMENT_ERR;
         goto EXIT_READ_DATA;
     }
